@@ -1,0 +1,18 @@
+[package]
+name = "ctj"
+authors = ["sakunia <sakunia@foxmail.com>"]
+description = "Convert CSV data to JSON data"
+license = "MIT"
+version = "0.1.3"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.66"
+clap = { version = "4.0.29", features = ["derive"] }
+csv = "1.1.6"
+json = "0.12.4"
+
+[build-dependencies]
+clap = { version = "4.0.29", features = ["derive"] }
+clap_complete = "4.0.6"
+clap_complete_nushell = "0.1.8"

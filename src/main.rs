@@ -43,7 +43,7 @@ fn main() -> Result<()> {
                     return Err(anyhow!("Destination file is invalid. Should be specified and should contain the .json extension!"));
                 }
             } else {
-                return Err(anyhow!("Fetch detination file name failed!"));
+                return Err(anyhow!("Fetch destination file name failed!"));
             }
             write_to_file(json, contents, destination.to_string_lossy().to_string())?;
         }

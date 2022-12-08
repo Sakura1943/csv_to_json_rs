@@ -9,6 +9,8 @@ pub struct Cli {
     pub source: PathBuf,
     #[arg(short, long, value_name = "DEST", help = "Destination File path")]
     pub destination: Option<PathBuf>,
+    #[arg(short, long, help = "Print the processed JSON data")]
+    pub verbose: bool
 }
 
 impl Cli {

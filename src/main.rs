@@ -8,12 +8,14 @@ use csv::Reader;
 use ctj::cli::Cli;
 use json::JsonValue;
 use std::{
-    fs::{read_to_string, File, create_dir_all},
-    io::Write, path::Path,
+    fs::{create_dir_all, read_to_string, File},
+    io::Write,
+    path::Path,
 };
 
 fn main() -> Result<()> {
     let client = Cli::build();
+    let verbose = client.verbose;
     if let Some(file_name) = client.source.extension() {
         if !file_name
             .to_string_lossy()
@@ -45,7 +47,12 @@ fn main() -> Result<()> {
             } else {
                 return Err(anyhow!("Fetch destination file name failed!"));
             }
-            write_to_file(json, contents, destination.to_string_lossy().to_string())?;
+            write_to_file(
+                json,
+                contents,
+                destination.to_string_lossy().to_string(),
+                verbose,
+            )?;
         }
         None => {
             let source_file = client.source;
@@ -54,7 +61,7 @@ fn main() -> Result<()> {
                     .to_string_lossy()
                     .to_string()
                     .replace(".csv", ".json");
-                write_to_file(json, contents, destination)?;
+                write_to_file(json, contents, destination, verbose)?;
             }
         }
     };
@@ -80,7 +87,12 @@ fn update_json_with_record_row(
     Ok(json)
 }
 
-fn write_to_file(mut json: JsonValue, contents: String, destination: String) -> Result<()> {
+fn write_to_file(
+    mut json: JsonValue,
+    contents: String,
+    destination: String,
+    verbose: bool,
+) -> Result<()> {
     let mut rdr = Reader::from_reader(contents.as_bytes());
     let mut headers = Vec::new();
     let header_list = rdr.headers()?;
@@ -99,6 +111,11 @@ fn write_to_file(mut json: JsonValue, contents: String, destination: String) -> 
         create_dir_all(parent)?;
     }
     let mut file = File::create(&destination)?;
-    file.write(json::stringify_pretty(json, 4).as_bytes())?;
+    let binding = json::stringify_pretty(json, 4);
+    let json_bytes = binding.as_bytes();
+    file.write(json_bytes)?;
+    if verbose {
+        println!("{}", String::from_utf8(json_bytes.to_vec())?);
+    }
     Ok(())
 }

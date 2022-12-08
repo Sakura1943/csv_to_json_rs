@@ -3,7 +3,7 @@ name = "ctj"
 authors = ["sakunia <sakunia@foxmail.com>"]
 description = "Convert CSV data to JSON data"
 license = "MIT"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 
 [dependencies]
